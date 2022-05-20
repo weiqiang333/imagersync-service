@@ -1,0 +1,20 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DouMeng</title>
+    <link rel="shortcut icon" href="./static/favicon.ico" />
+    <style>
+        h1 {font-size:40px;}
+        h2 {font-size:30px;}
+        mp {font-size:6px;font-style:italic;}
+    </style>
+</head>
+<body>
+    <img loading="lazy" src="./static/Nova_Logo.png" alt="xxx">
+    <mp>Doumeng 协助你快乐的写 Bug.</mp></br>
+    <h1>DouMeng Tools</h1>
+    {{ range $key, $value := .tools }}
+        <b>{{ $key }}:</b> <a href="{{ $value }}" target="_blank">{{ $value }}</a></br>
+    {{ end }}
+</body>
+</html>

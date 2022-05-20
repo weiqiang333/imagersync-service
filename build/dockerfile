@@ -1,0 +1,10 @@
+FROM harbor.xxx.com/base/centos7.6:latest
+
+COPY build/go-default-service /opt/go-default-service
+RUN mkdir /opt/web/ /opt/configs/
+COPY configs /opt/configs
+COPY web/static /opt/web/static
+COPY web/templates /opt/web/templates
+WORKDIR /opt/
+EXPOSE 8080
+ENTRYPOINT ["./go-default-service"]

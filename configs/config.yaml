@@ -1,0 +1,9 @@
+config:
+  tools:
+    gitlab: http://git.vnnox.net/NovaCloud-SPD/novacloud-imagersync-service
+
+rsyncserver:
+  logfile: ./novacloud_imagersync.log
+  auth:
+    admin: novacloud
+    jenkins: novacloud
