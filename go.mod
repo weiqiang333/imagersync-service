@@ -1,4 +1,4 @@
-module novacloud-imagersync-service
+module imagersync-service
 
 go 1.15
 

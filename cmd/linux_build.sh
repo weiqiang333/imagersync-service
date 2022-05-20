@@ -4,7 +4,7 @@ set -x
 set -e
 
 imageTagVersion="v0.1"
-registrieAddress="harbor.xxx.comh"
+registrieAddress="harbor.xxx.com"
 
 export GOARCH=amd64
 export GOOS=linux

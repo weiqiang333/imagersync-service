@@ -8,8 +8,8 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 
-	"novacloud-imagersync-service/web/api"
-	"novacloud-imagersync-service/web/api/v1/imagersync"
+	"imagersync-service/web/api"
+	"imagersync-service/web/api/v1/imagersync"
 )
 
 func init() {

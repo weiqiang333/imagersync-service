@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"novacloud-imagersync-service/internal/configVar"
+	"imagersync-service/internal/configVar"
 )
 
 // Get Url /image/rsync/me

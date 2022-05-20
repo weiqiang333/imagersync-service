@@ -22,7 +22,7 @@ metadata:
   namespace: go
 spec:
   rules:
-    - host: go.novastar.tech
+    - host: go.example.tech
       http:
         paths:
           - path: /
@@ -79,7 +79,7 @@ spec:
     spec:
       containers:
         - name: go-default-service
-          image: harbor.go.novastar.tech/devops/go-default-service:v0.1
+          image: harbor.go.example.tech/devops/go-default-service:v0.1
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 5
