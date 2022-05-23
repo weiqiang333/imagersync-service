@@ -1,4 +1,4 @@
-module imagersync-service
+module github.com/weiqiang333/imagersync-service
 
 go 1.15
 

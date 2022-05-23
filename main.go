@@ -7,9 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-
-	"imagersync-service/web/api"
-	"imagersync-service/web/api/v1/imagersync"
+	"github.com/weiqiang333/imagersync-service/web/api"
+	"github.com/weiqiang333/imagersync-service/web/api/v1/imagersync"
 )
 
 func init() {
