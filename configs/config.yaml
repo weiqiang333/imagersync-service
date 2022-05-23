@@ -7,3 +7,16 @@ rsyncserver:
   auth:
     admin: admin
     jenkins: jenkins
+  rsyncconfig:
+    auth:
+      ou:
+        registry: registry.ap-south-1.aliyuncs.com
+        username: xxx
+        password: xxx
+      cn:
+        registry: registry.cn-hangzhou.aliyuncs.com
+        username: xxx
+        password: xxx
+    task:
+      proc_num: 5
+      retries: 2
