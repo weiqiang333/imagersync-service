@@ -4,8 +4,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-
-	"imagersync-service/internal/configVar"
+	"github.com/weiqiang333/imagersync-service/internal/configVar"
 )
 
 // Get Url /image/rsync/me
