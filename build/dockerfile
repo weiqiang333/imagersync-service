@@ -1,4 +1,4 @@
-FROM harbor.xxx.com/base/centos7.6:latest
+FROM centos7.6:latest
 
 COPY build/imagersync_service_bin /opt/imagersync_service_bin
 RUN mkdir /opt/web/ /opt/configs/
