@@ -1,10 +1,10 @@
 FROM harbor.xxx.com/base/centos7.6:latest
 
-COPY build/go-default-service /opt/go-default-service
+COPY build/imagersync_service_bin /opt/imagersync_service_bin
 RUN mkdir /opt/web/ /opt/configs/
 COPY configs /opt/configs
 COPY web/static /opt/web/static
 COPY web/templates /opt/web/templates
 WORKDIR /opt/
 EXPOSE 8080
-ENTRYPOINT ["./go-default-service"]
+ENTRYPOINT ["./imagersync_service_bin"]

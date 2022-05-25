@@ -3,7 +3,7 @@ config:
     github: https://github.com/weiqiang333/imagersync-service
 
 rsyncserver:
-  logfile: ./imagersync.log
+  logfile: logs/rsync_analysis.log
   auth:
     admin: admin
     jenkins: jenkins

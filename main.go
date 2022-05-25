@@ -12,7 +12,8 @@ import (
 )
 
 func init() {
-	pflag.String("configFile", string("configs/config.yaml"), "go config file")
+	pflag.String("configFile", string("configs/config.yaml"), "service run config file")
+	pflag.String("address", "0.0.0.0:8080", "service run address, default :8080")
 	pflag.ErrHelp.Error()
 }
 
