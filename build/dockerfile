@@ -1,7 +1,7 @@
 FROM centos7.6:latest
 
 COPY build/imagersync_service_bin /opt/imagersync_service_bin
-RUN mkdir /opt/web/ /opt/configs/
+RUN mkdir /opt/web/ /opt/configs/ /opt/logs/
 COPY configs /opt/configs
 COPY web/static /opt/web/static
 COPY web/templates /opt/web/templates
