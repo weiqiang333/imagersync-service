@@ -1,9 +1,11 @@
 package imagersync
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"github.com/weiqiang333/imagersync-service/internal/configVar"
 	"github.com/weiqiang333/imagersync-service/internal/imagersync"
 )
@@ -56,6 +58,13 @@ func PostImageRsync(c *gin.Context) {
 			DurationTimeSeconds: durationTimeSeconds,
 		},
 	}
+
+	jsonBytes, err := json.Marshal(imageRsyncResponseBody)
+	if err != nil {
+		logger.Warnf("failed in PostImageRsync: json Marshal imageRsyncResponseBody is failed: %s", err.Error())
+	}
+	analysisLogs := imagersync.NewFileAndStdoutLogger(viper.GetString("rsyncserver.logfile"))
+	analysisLogs.Info(string(jsonBytes))
 
 	if err != nil {
 		logger.Errorf("failed in PostImageRsync: 同步异常, user: %s, RsyncConfig: %s, error: %s",

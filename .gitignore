@@ -2,4 +2,4 @@ vendor
 build/.*_bin
 .idea/*
 configs
-logs
+logs/*

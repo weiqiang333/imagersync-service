@@ -33,9 +33,6 @@ func PushImageSync(source_repo string, dest_repo string) (string, string, error)
 
 	rsyncStatus := analysisProcessData(processData.String())
 
-	analysisLogs := NewFileAndStdoutLogger(viper.GetString("rsyncserver.logfile"))
-	analysisLogs.Info(processData.String())
-
 	return rsyncStatus, processData.String(), nil
 }
 
