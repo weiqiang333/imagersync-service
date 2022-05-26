@@ -1,6 +1,9 @@
 package configVar
 
-import "time"
+import (
+	"bytes"
+	"time"
+)
 
 var ConfigFile string
 
@@ -11,7 +14,7 @@ type ImageRsyncConfig struct {
 }
 type ImageRsyncData struct {
 	RsyncStatus         string    `json:"rsync_status"`
-	RsyncError          string    `json:"rsync_error"`
+	RsyncError          interface{}    `json:"rsync_error"`
 	RsyncInfo           string    `json:"rsync_info"`
 	StartTime           time.Time `json:"start_time"`
 	EndTime             time.Time `json:"end_time"`
@@ -25,3 +28,5 @@ type ImageRsyncResponseBody struct {
 	RsyncConfig ImageRsyncConfig `json:"rsync_config"`
 	Username    string           `json:"username"`
 }
+
+type ProcessData bytes.Buffer

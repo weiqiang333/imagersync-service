@@ -1,3 +1,5 @@
 vendor
-build/.*_default
+build/.*_bin
 .idea/*
+configs
+logs/*

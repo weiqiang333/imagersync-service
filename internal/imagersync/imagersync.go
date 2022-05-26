@@ -3,17 +3,18 @@ package imagersync
 import (
 	"container/list"
 	"fmt"
+	"strings"
 
-	"github.com/sirupsen/logrus"
-	imageSyncClient "github.com/AliyunContainerService/image-syncer/pkg/client"
 	"github.com/spf13/viper"
-	"github.com/weiqiang333/imagersync-serviceimagersync-service/internal/imagersync"
+	imageSyncClient "github.com/weiqiang333/image-syncer/pkg/client"
 )
 
 // PushImageSync: 加载并运行镜像同步。
 // parameter: <source_repo>:<dest_repo> map
-func PushImageSync(source_repo string, dest_repo string)  {
+// return: rsync status, rsync process Data, error
+func PushImageSync(source_repo string, dest_repo string) (string, string, error) {
 	config := LoadAuthAndConfig(source_repo, dest_repo)
+	log, processData := NewStdoutAndBufferLogger()
 	client := imageSyncClient.Client{
 		TaskList:                   list.New(),
 		UrlPairList:                list.New(),
@@ -22,13 +23,17 @@ func PushImageSync(source_repo string, dest_repo string)  {
 		Config:                     config,
 		RoutineNum:                 viper.GetInt("rsyncserver.rsyncconfig.task.proc_num"),
 		Retries:                    viper.GetInt("rsyncserver.rsyncconfig.task.retries"),
-		Logger:                     imagersync.NewFileLogger(""),
+		Logger:                     log,
 		TaskListChan:               make(chan int, 1),
 		UrlPairListChan:            make(chan int, 1),
 		FailedTaskListChan:         make(chan int, 1),
 		FailedTaskGenerateListChan: make(chan int, 1),
 	}
 	client.Run()
+
+	rsyncStatus := analysisProcessData(processData.String())
+
+	return rsyncStatus, processData.String(), nil
 }
 
 // LoadAuthConfig
@@ -40,10 +45,10 @@ func LoadAuthAndConfig(source_repo string, dest_repo string) *imageSyncClient.Co
 			source_repo: dest_repo,
 		},
 	}
-	fmt.Println(config)
 	return &config
 }
 
+//LoadAuth:
 func LoadAuth() map[string]imageSyncClient.Auth {
 	authMap := map[string]imageSyncClient.Auth{}
 	// getViperConfigRegionTypeName: 这里提供了 dest_repo 的多个不同目标资源，这里按需更改
@@ -56,10 +61,16 @@ func LoadAuth() map[string]imageSyncClient.Auth {
 		authMap[viper.GetString(fmt.Sprintf("rsyncserver.rsyncconfig.auth.%s.registry", authName))] = imageSyncClient.Auth{
 			Username: viper.GetString(fmt.Sprintf("rsyncserver.rsyncconfig.auth.%s.username", authName)),
 			Password: viper.GetString(fmt.Sprintf("rsyncserver.rsyncconfig.auth.%s.password", authName)),
-			Insecure: false,
+			Insecure: viper.GetBool(fmt.Sprintf("rsyncserver.rsyncconfig.auth.%s.insecure", authName)),
 		}
 	}
-	fmt.Println(authMap)
 	return authMap
 }
 
+// analysisProcessData: 分析过程数据
+func analysisProcessData(processData string) string {
+	if strings.Contains(processData, "Synchronization successfully") {
+		return "successfully"
+	}
+	return "failed"
+}

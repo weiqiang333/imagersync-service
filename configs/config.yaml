@@ -3,20 +3,22 @@ config:
     github: https://github.com/weiqiang333/imagersync-service
 
 rsyncserver:
-  logfile: ./imagersync.log
+  logfile: logs/rsync_analysis.log
   auth:
     admin: admin
     jenkins: jenkins
   rsyncconfig:
     auth:
-      ou:
-        registry: registry.ap-south-1.aliyuncs.com
-        username: xxx
-        password: xxx
       cn:
         registry: registry.cn-hangzhou.aliyuncs.com
         username: xxx
         password: xxx
+        insecure: false
+      us:
+        registry: registry.us-west-1.aliyuncs.com
+        username: xxx
+        password: xxx
+        insecure: true
     task:
       proc_num: 5
       retries: 2

@@ -1,0 +1,15 @@
+Description=image rsync service Server
+After=network.target
+After=network-online.target
+Wants=network-online.target
+​
+[Service]
+Type=simple
+WorkingDirectory=/data/doumeng/imagersync-service/
+ExecStart=/data/doumeng/imagersync-service/build/imagersync_service_bin --address 0.0.0.0:8000
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65536
+​
+[Install]
+WantedBy=multi-user.target

@@ -1,10 +1,13 @@
 package imagersync
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"github.com/weiqiang333/imagersync-service/internal/configVar"
+	"github.com/weiqiang333/imagersync-service/internal/imagersync"
 )
 
 // Get Url /image/rsync/me
@@ -21,34 +24,54 @@ func PostImageRsync(c *gin.Context) {
 	username := c.MustGet(gin.AuthUserKey).(string)
 	startTime := time.Now()
 	requestJson := configVar.ImageRsyncRequestBody{}
+	logger := imagersync.NewStdoutLogger()
 	err := c.BindJSON(&requestJson)
 	if err != nil {
+		logger.Errorf("failed in PostImageRsync: requestJson is not BindJSON, error: %s", err.Error())
 		c.JSON(500, configVar.ImageRsyncResponseBody{
-			RsyncData: configVar.ImageRsyncData{
-				RsyncError: err.Error(),
-				StartTime:  startTime,
-			},
 			RsyncConfig: configVar.ImageRsyncConfig{},
 			Username:    username,
+			RsyncData: configVar.ImageRsyncData{
+				RsyncStatus: "unusual",
+				RsyncError:  err.Error(),
+				StartTime:   startTime,
+			},
 		})
 		return
 	}
 
-	time.Sleep(time.Second * 2)
+	logger.Infof("in PostImageRsync 开始同步: user: %s, RsyncConfig: %s", username, requestJson.RsyncConfig)
+	rsyncStatus, processData, err := imagersync.PushImageSync(requestJson.RsyncConfig.Source, requestJson.RsyncConfig.Target)
 
 	endTime := time.Now()
 	durationTimeSeconds := endTime.Sub(startTime).Seconds()
+
 	imageRsyncResponseBody := configVar.ImageRsyncResponseBody{
 		RsyncConfig: requestJson.RsyncConfig,
 		Username:    username,
 		RsyncData: configVar.ImageRsyncData{
-			RsyncStatus:         "",
-			RsyncError:          "",
-			RsyncInfo:           "",
+			RsyncStatus:         rsyncStatus,
+			RsyncError:          err,
+			RsyncInfo:           processData,
 			StartTime:           startTime,
 			EndTime:             endTime,
 			DurationTimeSeconds: durationTimeSeconds,
 		},
 	}
+
+	jsonBytes, err := json.Marshal(imageRsyncResponseBody)
+	if err != nil {
+		logger.Warnf("failed in PostImageRsync: json Marshal imageRsyncResponseBody is failed: %s", err.Error())
+	}
+	analysisLogs := imagersync.NewFileAndStdoutLogger(viper.GetString("rsyncserver.logfile"))
+	analysisLogs.Info(string(jsonBytes))
+
+	if err != nil {
+		logger.Errorf("failed in PostImageRsync: 同步异常, user: %s, RsyncConfig: %s, error: %s",
+			username, requestJson.RsyncConfig, err.Error())
+		c.JSON(500, imageRsyncResponseBody)
+		return
+	}
+
 	c.JSON(200, imageRsyncResponseBody)
 }
