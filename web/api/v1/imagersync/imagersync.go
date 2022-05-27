@@ -66,9 +66,9 @@ func PostImageRsync(c *gin.Context) {
 	analysisLogs := imagersync.NewFileAndStdoutLogger(viper.GetString("rsyncserver.logfile"))
 	analysisLogs.Info(string(jsonBytes))
 
-	if err != nil {
+	if err != nil || rsyncStatus == "failed" {
 		logger.Errorf("failed in PostImageRsync: 同步异常, user: %s, RsyncConfig: %s, error: %s",
-			username, requestJson.RsyncConfig, err.Error())
+			username, requestJson.RsyncConfig, err)
 		c.JSON(500, imageRsyncResponseBody)
 		return
 	}
